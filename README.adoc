@@ -1,0 +1,48 @@
+= Draft OGC API - Processes  Conformance Test Suite
+
+== Scope
+
+This repository holds the source of the Executable Test Suite (ETS) of the https://docs.ogc.org/is/18-062r2/18-062r2.html[OGC API - Processes - Part 1: Core] Standard.
+
+Visit the http://opengeospatial.github.io/ets-ogcapi-processes20/[project documentation website TBD]
+for more information, including the API documentation.
+
+== How to run the test suite using Docker
+
+There are two Dockerfiles in this repository. Each one is used for a different purpose, as explained in the following.
+
+==== Run the test suite using Docker with Apache Maven installed locally
+
+The Dockerfile under src/docker/ is used for a build with Apache Maven.
+Run the following Maven command from the root folder of the repository:
+
+`mvn clean install -Dsource=8  docker:run -Pdocker`
+
+From here, you can now access http://localhost:8081/teamengine to access the deployed teamengine with the OGC API - Processes Test Suite.
+
+You can log in as `ogctest`, with a password of ogctest. 
+
+==== Run the test suite using Docker without Apache Maven installed locally
+
+You can use the Dockerfile in the root directory of this repository to build the ETS within a Docker container, i.e. without the need to have Apache Maven and Java installed locally on your computer. In oder to do so, please follow the instructions given in the Dockerfile.
+
+== How to build the test suite
+
+The test suite is built using https://maven.apache.org/[Apache Maven v3].
+
+== How to run the test suite
+The options for running the suite are summarized in
+
+include::src/site/asciidoc/how-to-run-the-tests.adoc[]
+
+== How to contribute
+
+If you would like to get involved, you can:
+
+* https://github.com/GeoLabs/ets-ogcapi-processes20/issues[Report an issue] such as a defect or
+an enhancement request
+* Help to resolve an https://github.com/GeoLabs/ets-ogcapi-processes20/issues?q=is%3Aopen[open issue]
+* Fix a bug: Fork the repository, apply the fix, and create a pull request
+* Add new tests: Fork the repository, implement and verify the tests on a new topic branch,
+and create a pull request (don't forget to periodically rebase long-lived branches so
+there are no extraneous conflicts)

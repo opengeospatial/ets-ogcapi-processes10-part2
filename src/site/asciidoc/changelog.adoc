@@ -1,0 +1,43 @@
+= Release Notes OGC API - Processes - Part 1: Core
+
+== 1.0 (2023-06)
+
+- https://github.com/opengeospatial/ets-ogcapi-processes10/pull/67[#67] Set status of test suite to Final
+
+== 0.5 (2023-05)
+
+- https://github.com/opengeospatial/ets-ogcapi-processes10/issues/11[#1] 'null' or empty reason given for certain test failures bugSomething isn't working
+- https://github.com/opengeospatial/ets-ogcapi-processes10/issues/37[#37] multipart/related ambiguity; useless code needed for sync processes returning single output
+- https://github.com/opengeospatial/ets-ogcapi-processes10/issues/40[#40] Test failure on async execution returning 200 response (sync, or sync & async process)
+- https://github.com/opengeospatial/ets-ogcapi-processes10/issues/59[#59] Extraneous id included in execution request
+- https://github.com/opengeospatial/ets-ogcapi-processes10/issues/61[#61] Test for single output is actually requesting none
+- https://github.com/opengeospatial/ets-ogcapi-processes10/issues/65[#65] Update TEAM Engine dependencies to v5.6.1
+
+== 0.4 (2023-02)
+
+- https://github.com/opengeospatial/ets-ogcapi-processes10/issues/45[#45] The suite executes only 3 test
+- https://github.com/opengeospatial/ets-ogcapi-processes10/issues/33[#33] Update 2-minute method
+- https://github.com/opengeospatial/ets-ogcapi-processes10/issues/32[#32] Update documentation page with list of supported Conformance Classes
+- https://github.com/opengeospatial/ets-ogcapi-processes10/issues/24[#24] cannot run docker container
+- https://github.com/opengeospatial/ets-ogcapi-processes10/issues/23[#23] Implement OGC Process Description Conformance Class
+- https://github.com/opengeospatial/ets-ogcapi-processes10/issues/21[#21] Implement missing job results tests
+
+== 0.3 (2022-08)
+
+- https://github.com/opengeospatial/ets-ogcapi-processes10/issues/23[#23] Implement OGC Process Description Conformance Class
+- https://github.com/opengeospatial/ets-ogcapi-processes10/issues/20[#20] Implement missing raw data response tests
+- https://github.com/opengeospatial/ets-ogcapi-processes10/issues/19[#19] Implement missing inline input tests
+- https://github.com/opengeospatial/ets-ogcapi-processes10/issues/13[#13] Test Job Creation Input Ref is mistaken
+- https://github.com/opengeospatial/ets-ogcapi-processes10/issues/10[#10] status code error owing to unsupported async
+- https://github.com/opengeospatial/ets-ogcapi-processes10/issues/9[#9] test session results not properly displaying URL
+
+== 0.2 (2022-05-30)
+- https://github.com/opengeospatial/ets-ogcapi-processes10/issues/6[#6]: OGC API Processes 1.0 and OGC API Features 1.0 test suites cannot be deployed to same TEAM Engine instance
+- https://github.com/opengeospatial/ets-ogcapi-processes10/issues/5[#5]: Landing page of TEAM Engine displays 0.1 in version column
+- https://github.com/opengeospatial/ets-ogcapi-processes10/issues/4[#4]: Release notes are not displayed on project documentation website
+
+== 0.1 (2022-01-27)
+- Implement A.5.  Conformance Class HTML
+- Implement A.2.  Conformance Class Core
+- Implement A.3.  Conformance Class OGC Process
+- Implement A.2.  Conformance Class Core
