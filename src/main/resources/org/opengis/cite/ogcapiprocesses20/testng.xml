@@ -27,9 +27,15 @@
     </packages>
   </test>  
   
-  <test name="OGC APPLICATION PACKAGE">
+  <test name="OGC Application Package">
     <packages>
-      <package name="org.opengis.cite.ogcapiprocesses20.ogcapppkg" />    
+      <package name="org.opengis.cite.ogcapiprocesses20.ogcapppkg" />
+    </packages>
+  </test>   
+
+  <test name="Docker">
+    <packages>
+      <package name="org.opengis.cite.ogcapiprocesses20.docker" />
     </packages>
   </test>   
 

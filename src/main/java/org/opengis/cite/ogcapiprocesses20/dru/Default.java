@@ -1,19 +1,10 @@
 package org.opengis.cite.ogcapiprocesses20.dru;
 
-import static io.restassured.RestAssured.trustStore;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.testng.Assert.assertTrue;
-
-import java.io.FileWriter;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.ObjectUtils.Null;
-import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
@@ -21,15 +12,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.openapi4j.core.exception.ResolutionException;
 import org.openapi4j.core.validation.ValidationException;
-import org.openapi4j.core.validation.ValidationResults.ValidationItem;
-import org.openapi4j.operation.validator.model.Request;
-import org.openapi4j.operation.validator.model.Response;
-import org.openapi4j.operation.validator.model.impl.Body;
-import org.openapi4j.operation.validator.model.impl.DefaultResponse;
 import org.openapi4j.operation.validator.validation.OperationValidator;
 import org.openapi4j.parser.OpenApi3Parser;
 import org.openapi4j.parser.model.v3.OpenApi3;
@@ -38,9 +23,6 @@ import org.openapi4j.parser.model.v3.Path;
 import org.openapi4j.schema.validator.ValidationData;
 import org.opengis.cite.ogcapiprocesses20.CommonFixture;
 import org.opengis.cite.ogcapiprocesses20.SuiteAttribute;
-import org.opengis.cite.ogcapiprocesses20.TestRunArg;
-import org.opengis.cite.ogcapiprocesses20.conformance.Conformance;
-import org.opengis.cite.ogcapiprocesses20.util.PathSettingRequest;
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.BeforeClass;
@@ -68,12 +50,9 @@ public class Default extends CommonFixture {
 
 	private String echoProcessId;
 	
-	private OperationValidator validator;
+	private URL getProcessListURL;
     
-    private URL getProcessListURL;
-    
-    private static String urlSchema="https://schemas.opengis.net/ogcapi/processes/part1/1.0/openapi/schemas/processList.yaml";    
-    private static String uctValue="http://www.opengis.net/def/exceptions/ogcapi-processes-2/1.0/unsupported-content-type";
+    private static String uctValue="http://www.opengis.net/def/exceptions/ogcapi-processes-2/1.0/unsupported-media-type";
 	private static String ipValue="http://www.opengis.net/def/exceptions/ogcapi-processes-2/1.0/immutable-process";
 
 	@BeforeClass
@@ -84,7 +63,7 @@ public class Default extends CommonFixture {
 			addServerUnderTest(openApi3);
 		    final Path path = openApi3.getPathItemByOperationId(OPERATION_ID);
 		    final Operation operation = openApi3.getOperationById(OPERATION_ID);
-		    validator = new OperationValidator(openApi3, path, operation);
+		    new OperationValidator(openApi3, path, operation);
 		    getProcessListURL = new URL(processListEndpointString);
 			echoProcessId = (String) testContext.getSuite().getAttribute( SuiteAttribute.ECHO_PROCESS_ID.getName() );
 		} catch (MalformedURLException | ResolutionException | ValidationException e) {	
@@ -250,11 +229,15 @@ public class Default extends CommonFixture {
 			JsonNode responseNode = new ObjectMapper().readTree(responsePayload);
 			ArrayNode arrayNode = (ArrayNode) responseNode.get("processes");
 			for(int iCnt=0;iCnt<arrayNode.size();iCnt++){
+				System.out.println(isMutable);
+				System.out.println(arrayNode.get(iCnt).get("mutable").asBoolean());
+				System.out.println(arrayNode.get(iCnt).get("id").asText());
 				if((isMutable && arrayNode.get(iCnt).get("mutable").asBoolean())
 					||
 					(!isMutable && !arrayNode.get(iCnt).get("mutable").asBoolean()))
 					return arrayNode.get(iCnt).get("id").asText();
 			}
+			System.out.println("No process found with mutable="+isMutable);
 			return null;
 		} catch (Exception e) {
 			Assert.fail("An exception occured when searching for a process with the mutable property "+isMutable+" from "+getProcessListURL.toString()+". Reported exception: "+e.getLocalizedMessage());
@@ -286,7 +269,7 @@ public class Default extends CommonFixture {
 			HttpResponse httpResponse = client.execute(request);
 			// 1. Validate that a document was returned with an HTTP status code of 204.
 			Assert.assertTrue(httpResponse.getStatusLine().getStatusCode()==204,
-				"Status code is different from 204: "+httpResponse.getStatusLine().getStatusCode());
+				"Status code is different from 204: "+httpResponse.getStatusLine());
 
 		} catch (Exception e) {
 			Assert.fail("An exception occured using the following URL: "+getProcessListURL.toString()+"/"+processId+". Repported exception :"+e.getLocalizedMessage());

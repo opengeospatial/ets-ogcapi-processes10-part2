@@ -1,6 +1,11 @@
-package org.opengis.cite.ogcapiprocesses20.cwl;
+package org.opengis.cite.ogcapiprocesses20.docker;
 
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -50,9 +55,9 @@ public class Default extends CommonFixture {
 
 	private String echoProcessId;
 
-	private String cwlApplicationPackage;
+	private String ogcApplicationPackage;
 
-	private String cwlApplicationPackageContent;
+	private String ogcApplicationPackageContent;
 
 	private URL getProcessListURL;
     
@@ -69,26 +74,30 @@ public class Default extends CommonFixture {
 		    new OperationValidator(openApi3, path, operation);
 		    getProcessListURL = new URL(processListEndpointString);
 			echoProcessId = (String) testContext.getSuite().getAttribute( SuiteAttribute.ECHO_PROCESS_ID.getName() );
-			cwlApplicationPackage= (String) testContext.getSuite().getAttribute( SuiteAttribute.URL_APP_PKG.getName() );
+			ogcApplicationPackage= (String) testContext.getSuite().getAttribute( SuiteAttribute.URL_APP_PKG.getName() );
 		} catch (MalformedURLException | ResolutionException | ValidationException e) {	
 			
 			Assert.fail("Could not set up endpoint: " + processListEndpointString + ". Exception: " + e.getLocalizedMessage());
 		}
 	}
 
-	public void fetchCWLApplicationPackage() {
+	public void fetchOGCApplicationPackage() {
 		try {
-			HttpClient client = HttpClientBuilder.create().build();
-			HttpUriRequest request = new HttpGet(cwlApplicationPackage);
-			//request.setHeader("Accept", "application/json");
-		    this.reqEntity = request;
-			HttpResponse httpResponse = client.execute(request);
-			StringWriter writer = new StringWriter();
-			String encoding = StandardCharsets.UTF_8.name();
-			IOUtils.copy(httpResponse.getEntity().getContent(), writer, encoding);
-			cwlApplicationPackageContent = writer.toString();
+			// TODO: how to get the file path from the class?
+			File file=new File("/root/te_base/scripts/ogcapi-processes-2.0/1.0/testdata/ogcapppkg.json");
+			InputStream inputStream = new FileInputStream(file);
+			StringBuilder resultStringBuilder = new StringBuilder();
+			try (BufferedReader br
+			= new BufferedReader(new InputStreamReader(inputStream))) {
+				String line;
+				while ((line = br.readLine()) != null) {
+					resultStringBuilder.append(line).append("\n");
+				}
+			}
+			ogcApplicationPackageContent=resultStringBuilder.toString();
+			System.out.println(ogcApplicationPackageContent);
 		} catch (Exception e) {
-			Assert.fail("Failed downloading your applicaiton package "+cwlApplicationPackage);
+			Assert.fail("Failed parsing the default OGC Applicaiton Package "+ogcApplicationPackage+" Exception: "+e.getLocalizedMessage());
 		}
 	}
 
@@ -106,16 +115,16 @@ public class Default extends CommonFixture {
 	public void testProcessDeploy() {
 		final ValidationData<Void> data = new ValidationData<>();
 		try {
-			this.fetchCWLApplicationPackage();
+			this.fetchOGCApplicationPackage();
 			HttpClient client = HttpClientBuilder.create().build();
 			HttpPost request = new HttpPost(getProcessListURL.toString());
 			request.setHeader("Accept", "application/json");
-			request.setHeader("Content-Type", "application/cwl+yaml");
-			request.setEntity(new StringEntity(cwlApplicationPackageContent));
+			request.setHeader("Content-Type", "application/ogcapppkg+json");
+			request.setEntity(new StringEntity(ogcApplicationPackageContent));
 		    this.reqEntity = request;
 			HttpResponse httpResponse = client.execute(request);
 			Assert.assertTrue(httpResponse.getStatusLine().getStatusCode()==202 || httpResponse.getStatusLine().getStatusCode()==201,
-					"Expected 201 or 202 Created when deploying a process");
+					"Expected 201 or 202 Created when deploying a process "+httpResponse.getStatusLine());
 			if(httpResponse.getStatusLine().getStatusCode()==201){
 				Header[] headers = httpResponse.getHeaders("Location");
 				Assert.assertTrue(headers.length==1, "Expected a single Location header");
@@ -154,8 +163,8 @@ public class Default extends CommonFixture {
 			HttpClient client = HttpClientBuilder.create().build();
 			HttpPut request = new HttpPut(getProcessListURL.toString()+"/"+echoProcessId);
 			request.setHeader("Accept", "application/json");
-			request.setHeader("Content-Type", "application/cwl+yaml");
-			request.setEntity(new StringEntity(cwlApplicationPackageContent));
+			request.setHeader("Content-Type", "application/ogcapppkg+json");
+			request.setEntity(new StringEntity(ogcApplicationPackageContent));
 		    this.reqEntity = request;
 			HttpResponse httpResponse = client.execute(request);
 			Assert.assertTrue(httpResponse.getStatusLine().getStatusCode()==204,
