@@ -41,6 +41,7 @@
               <li>Deploy, Replace, Undeploy</li>
               <li>OGC Application Package</li>
               <li>CWL</li>
+              <li>Docker</li>
             </ul>
             <p>NOTE: For Abstract Test A.46 (/conf/core/job-results-exception-results-not-ready), the ETS will automatically add a field called <code>"pause":5</code> into the execution request of the echo process to support Recommendation A.1.</p>
           </div>
