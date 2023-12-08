@@ -95,7 +95,7 @@ public class Default extends CommonFixture {
 				}
 			}
 			ogcApplicationPackageContent=resultStringBuilder.toString();
-			System.out.println(ogcApplicationPackageContent);
+			//System.out.println(ogcApplicationPackageContent);
 		} catch (Exception e) {
 			Assert.fail("Failed parsing the default OGC Applicaiton Package "+ogcApplicationPackage+" Exception: "+e.getLocalizedMessage());
 		}
