@@ -1,8 +1,12 @@
 package org.opengis.cite.ogcapiprocesses20part2.ogcapppkg;
 
 
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -26,7 +30,9 @@ import org.testng.ITestContext;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 
@@ -61,6 +67,7 @@ public class Default extends CommonFixture {
     private static String urlSchema="https://schemas.opengis.net/ogcapi/processes/part1/1.0/openapi/schemas/processList.yaml";    
     private static String uctValue="http://www.opengis.net/def/exceptions/ogcapi-processes-2/1.0/unsupported-content-type";
 	private static String ipValue="http://www.opengis.net/def/exceptions/ogcapi-processes-2/1.0/immutable-process";
+    private static String dpValue="http://www.opengis.net/def/exceptions/ogcapi-processes-2/1.0/duplicated-process";
 
 	@BeforeClass
 	public void setup(ITestContext testContext) {		
@@ -110,7 +117,9 @@ public class Default extends CommonFixture {
 			System.out.println(this.createDeployNode().toString());
 			request.setEntity(new StringEntity(this.createDeployNode().toString()));
 		    this.reqEntity = request;
+			// 2. Issue an HTTP POST request using the content type “application/ogcapppkg+json” with as body a default OGC Application Package or the application package as reference, if any, on one path
 			HttpResponse httpResponse = client.execute(request);
+			// 3. Validate the reponse with /conf/ogcapppkg/deploy/response
 			Assert.assertTrue(httpResponse.getStatusLine().getStatusCode()==202 || httpResponse.getStatusLine().getStatusCode()==201,
 					"Expected 201 or 202 Created when deploying a process");
 			if(httpResponse.getStatusLine().getStatusCode()==201){
@@ -119,6 +128,11 @@ public class Default extends CommonFixture {
 				String[] tmpString = headers[0].getValue().split("/processes/");
 				echoProcessId = tmpString[1];
 			}
+
+			// 4. Send the same POST request again
+			httpResponse = client.execute(request);
+			// 5. Validate the reponse with /conf/ogcapppkg/deploy/response-deplicate
+			this.validateDuplicatedProcess(httpResponse);
 
 		} catch (Exception e) {
 			Assert.fail("Unable to deploy the process "+getProcessListURL.toString()+" Exception: "+e.getLocalizedMessage());

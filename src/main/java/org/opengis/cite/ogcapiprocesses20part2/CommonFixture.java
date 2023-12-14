@@ -6,19 +6,24 @@ import static io.restassured.http.Method.GET;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
 import org.openapi4j.core.validation.ValidationResults;
 import org.openapi4j.core.validation.ValidationResults.ValidationItem;
 import org.openapi4j.parser.model.v3.OpenApi3;
 import org.openapi4j.parser.model.v3.Server;
+import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -75,6 +80,10 @@ public class CommonFixture {
     protected final String CONTENT_ENCODING_PROPERTY_KEY = "contentEncoding";
     
     private static final String REQ_ATTR = "request";
+
+    private static String uctValue="http://www.opengis.net/def/exceptions/ogcapi-processes-2/1.0/unsupported-content-type";
+	private static String ipValue="http://www.opengis.net/def/exceptions/ogcapi-processes-2/1.0/immutable-process";
+    private static String dpValue="http://www.opengis.net/def/exceptions/ogcapi-processes-2/1.0/duplicated-process";
 
     /**
      * Initializes the common test fixture with a client component for interacting with HTTP endpoints.
@@ -563,4 +572,22 @@ public class CommonFixture {
         }
     }
 
+
+	public void validateDuplicatedProcess(HttpResponse httpResponse) {
+		try{
+			Assert.assertTrue(httpResponse.getStatusLine().getStatusCode()==409,
+					"Expected 409 duplicated process");
+			StringWriter writer = new StringWriter();
+			String encoding = StandardCharsets.UTF_8.name();
+			IOUtils.copy(httpResponse.getEntity().getContent(), writer, encoding);
+			String responsePayload = writer.toString();
+			System.out.println(responsePayload);
+			JsonNode responseNode = new ObjectMapper().readTree(responsePayload);
+			String relString = responseNode.get("type").asText();
+			System.out.println(relString);
+			Assert.assertTrue(relString.equals(dpValue), "Expected "+dpValue+" but was "+relString);
+		}catch(Exception e) {
+			Assert.fail("Unable to validate duplicated process "+e.getLocalizedMessage());
+		}
+	}
 }
