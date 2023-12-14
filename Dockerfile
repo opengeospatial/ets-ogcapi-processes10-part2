@@ -15,7 +15,7 @@
 #
 # git clone https://github.com/opengeospatial/ets-common.git src1
 # cd src1
-# git clone https://github.com/GeoLabs/ets-ogcapi-processes20.git
+# git clone https://github.com/GeoLabs/ets-ogcapi-processes20part2.git
 # cd ..
 #
 
@@ -24,11 +24,11 @@
 #
 # Build with the following command:
 #
-# docker build . -f src1/ets-ogcapi-processes20/Dockerfile -t teamengine/ogcapi-processes:latest
+# docker build . -f src1/ets-ogcapi-processes20part2/Dockerfile -t teamengine/ogcapi-processes20part2:latest
 #
 # Run using the following command:
 #
-# docker run -d --name cite-teamengine -p 8080:8080 teamengine/ogcapi-processes:latest
+# docker run -d --name cite-teamengine -p 8080:8080 teamengine/ogcapi-processes20part2:latest
 #
 # Log using the following command:
 #
@@ -59,7 +59,7 @@ RUN apt-get update && \
     echo "teamengine building..." && \
     mvn -f /home/app/src/pom.xml clean install > log && \
     echo "specific ETS building..." && \
-    mvn -f /home/app/src1/ets-ogcapi-processes20/pom.xml clean install && \
+    mvn -f /home/app/src1/ets-ogcapi-processes20-part2/pom.xml clean install && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false $BUILD_DEPS && \
     rm -rf /var/lib/apt/lists/*
 
@@ -73,9 +73,9 @@ ARG BUILD_DEPS=" \
 COPY --from=build /home/app/src/teamengine-web/target/teamengine*.war /root
 COPY --from=build /home/app/src/teamengine-web/target/teamengine-*common-libs.zip /root
 COPY --from=build /home/app/src/teamengine-console/target/teamengine-console-*-base.zip /root
-COPY --from=build /home/app/src1/ets-ogcapi-processes20/target/ets-ogcapi-processes20-*-aio.jar /root
-COPY --from=build /home/app/src1/ets-ogcapi-processes20/target/ets-ogcapi-processes20-*-ctl.zip /root
-COPY --from=build /home/app/src1/ets-ogcapi-processes20/target/ets-ogcapi-processes20-*-deps.zip /root
+COPY --from=build /home/app/src1/ets-ogcapi-processes20-part2/target/ets-ogcapi-processes20part2-*-aio.jar /root
+COPY --from=build /home/app/src1/ets-ogcapi-processes20-part2/target/ets-ogcapi-processes20part2-*-ctl.zip /root
+COPY --from=build /home/app/src1/ets-ogcapi-processes20-part2/target/ets-ogcapi-processes20part2-*-deps.zip /root
 ENV JAVA_OPTS="-Xms1024m -Xmx2048m -DTE_BASE=/root/te_base"
 RUN cd /root && \
     mkdir te_base && \
@@ -86,8 +86,8 @@ RUN cd /root && \
     unzip -q -o teamengine*.war -d /usr/local/tomcat/webapps/teamengine && \
     unzip -q -o teamengine-*common-libs.zip -d /usr/local/tomcat/lib && \
     unzip -q -o teamengine-console-*-base.zip -d /root/te_base && \
-    unzip -q -o ets-ogcapi-processes20-*-ctl.zip -d /root/te_base/scripts && \
-    unzip -q -o ets-ogcapi-processes20-*-deps.zip -d /usr/local/tomcat/webapps/teamengine/WEB-INF/lib && \
+    unzip -q -o ets-ogcapi-processes20part2-*-ctl.zip -d /root/te_base/scripts && \
+    unzip -q -o ets-ogcapi-processes20part2-*-deps.zip -d /usr/local/tomcat/webapps/teamengine/WEB-INF/lib && \
     rm -f *zip *war && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false $BUILD_DEPS && \
     rm -rf /var/lib/apt/lists/* /root/*zip /root/*war

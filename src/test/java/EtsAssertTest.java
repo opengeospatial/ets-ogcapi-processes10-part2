@@ -1,5 +1,5 @@
 import org.junit.Test;
-import org.opengis.cite.ogcapiprocesses20.EtsAssert;
+import org.opengis.cite.ogcapiprocesses20part2.EtsAssert;
 
 /**
  * @author <a href="mailto:goltz@lat-lon.de">Lyn Goltz </a>
