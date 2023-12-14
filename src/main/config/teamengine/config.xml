@@ -21,9 +21,9 @@
         <name>${project.version}</name>
         <status>Final</status>
         <sources>
-          <source>ogcapi-processes-2.0/${spec-version}/ctl</source>
+          <source>ogcapi-processes-1.0-part2/${spec-version}/ctl</source>
         </sources>
-        <webdir>ogcapi-processes-2.0/${spec-version}/site</webdir>
+        <webdir>ogcapi-processes-1.0-part2/${spec-version}/site</webdir>
       </revision>
     </version>
   </standard>
