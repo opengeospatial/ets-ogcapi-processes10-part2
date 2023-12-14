@@ -19,10 +19,10 @@ RUN cd /root/ && unzip -q teamengine-console-*-base.zip -d /root/te_base
 ENV JAVA_OPTS="-Xms1024m -Xmx2048m -DTE_BASE=/root/te_base"
 
 # add ETS for OGC API Processes 1.0
-ADD maven/ets-ogcapi-processes10-*-ctl.zip /root/
-RUN cd /root/ && unzip -q ets-ogcapi-processes10-*-ctl.zip -d /root/te_base/scripts
-ADD maven/ets-ogcapi-processes10-*-deps.zip /root/
-RUN cd /root/ && unzip -q -o ets-ogcapi-processes10-*-deps.zip -d /usr/local/tomcat/webapps/teamengine/WEB-INF/lib
+ADD maven/ets-ogcapi-processes20part2-*-ctl.zip /root/
+RUN cd /root/ && unzip -q ets-ogcapi-processes20part2-*-ctl.zip -d /root/te_base/scripts
+ADD maven/ets-ogcapi-processes20part2-*-deps.zip /root/
+RUN cd /root/ && unzip -q -o ets-ogcapi-processes20part2-*-deps.zip -d /usr/local/tomcat/webapps/teamengine/WEB-INF/lib
 
 RUN rm -R /root/te_base/scripts/note
 

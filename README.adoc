@@ -2,9 +2,9 @@
 
 == Scope
 
-This repository holds the source of the Executable Test Suite (ETS) of the https://docs.ogc.org/is/18-062r2/18-062r2.html[OGC API - Processes - Part 1: Core] Standard.
+This repository holds the source of the Executable Test Suite (ETS) of the https://docs.ogc.org/DRAFTS/20-044.html[OGC API - Processes - Part 2: Deploy, Replace, Undeploy] draft specification.
 
-Visit the http://opengeospatial.github.io/ets-ogcapi-processes20/[project documentation website TBD]
+Visit the http://opengeospatial.github.io/ets-ogcapi-processes20-part2/[project documentation website]
 for more information, including the API documentation.
 
 == How to run the test suite using Docker
@@ -39,9 +39,9 @@ include::src/site/asciidoc/how-to-run-the-tests.adoc[]
 
 If you would like to get involved, you can:
 
-* https://github.com/GeoLabs/ets-ogcapi-processes20/issues[Report an issue] such as a defect or
+* https://github.com/GeoLabs/ets-ogcapi-processes20-part2/issues[Report an issue] such as a defect or
 an enhancement request
-* Help to resolve an https://github.com/GeoLabs/ets-ogcapi-processes20/issues?q=is%3Aopen[open issue]
+* Help to resolve an https://github.com/GeoLabs/ets-ogcapi-processes20-part2/issues?q=is%3Aopen[open issue]
 * Fix a bug: Fork the repository, apply the fix, and create a pull request
 * Add new tests: Fork the repository, implement and verify the tests on a new topic branch,
 and create a pull request (don't forget to periodically rebase long-lived branches so
