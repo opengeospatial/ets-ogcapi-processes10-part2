@@ -1,4 +1,4 @@
-= Draft OGC API - Processes  Conformance Test Suite
+= Draft OGC API - Processes - Part 2: Deploy Replace Update (DRU)  Conformance Test Suite
 
 == Scope
 
