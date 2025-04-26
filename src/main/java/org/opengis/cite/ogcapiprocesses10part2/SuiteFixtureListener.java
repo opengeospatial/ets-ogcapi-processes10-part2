@@ -12,7 +12,7 @@ import org.opengis.cite.ogcapiprocesses10part2.util.URIUtils;
 import org.testng.ISuite;
 import org.testng.ISuiteListener;
 
-import com.sun.jersey.api.client.Client;
+import jakarta.ws.rs.client.Client;
 
 /**
  * A listener that performs various tasks before and after a test suite is run, usually concerned with maintaining a
@@ -100,6 +100,8 @@ public class SuiteFixtureListener implements ISuiteListener {
         			String.format( "Could not parse parameter %s: %s. Expected is a valid string",
         					TestRunArg.ECHOPROCESSID.toString(), echoProcessId ) );
         }
+        
+        suite.setAttribute(SuiteAttribute.USE_LOCAL_SCHEMA.getName(), true);
         
         String testAllProcesses = params.get( TestRunArg.TESTALLPROCESSES.toString() );
 

@@ -67,7 +67,7 @@ public class Default extends CommonFixture {
 	public void setup(ITestContext testContext) {		
 		String processListEndpointString = rootUri.toString() + getProcessListPath;		
 		try {		
-			openApi3 = new OpenApi3Parser().parse(specURI.toURL(), false);
+			openApi3 = new OpenApi3Parser().parse(specURL, false);
 			addServerUnderTest(openApi3);
 		    final Path path = openApi3.getPathItemByOperationId(OPERATION_ID);
 		    final Operation operation = openApi3.getOperationById(OPERATION_ID);
