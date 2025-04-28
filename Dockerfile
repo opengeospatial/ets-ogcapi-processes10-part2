@@ -15,7 +15,7 @@
 #
 # git clone https://github.com/opengeospatial/ets-common.git src1
 # cd src1
-# git clone https://github.com/GeoLabs/ets-ogcapi-processes10part2.git
+# git clone https://github.com/opengeospatial/ets-ogcapi-processes10part2.git
 # cd ..
 #
 
@@ -48,7 +48,7 @@
 #  1. build the teamengine
 #  2. build the Test Suite
 #
-FROM maven:3.8.3-jdk-8-slim AS build
+FROM maven:3.9.9-eclipse-temurin-17-focal AS build
 ARG BUILD_DEPS=" \
     git \
 "
@@ -59,6 +59,7 @@ RUN apt-get update && \
     echo "teamengine building..." && \
     mvn -f /home/app/src/pom.xml clean install > log && \
     echo "specific ETS building..." && \
+    mvn -f /home/app/src1/ets-ogcapi-processes10-part2/pom.xml spring-javaformat:apply && \
     mvn -f /home/app/src1/ets-ogcapi-processes10-part2/pom.xml clean install && \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false $BUILD_DEPS && \
     rm -rf /var/lib/apt/lists/*
@@ -66,7 +67,7 @@ RUN apt-get update && \
 #
 # Create the container to be run based on tomcat
 #
-FROM tomcat:7.0-jre8
+FROM tomcat:10.1-jre17-temurin-jammy
 ARG BUILD_DEPS=" \
     unzip \
 "
@@ -80,7 +81,7 @@ ENV JAVA_OPTS="-Xms1024m -Xmx2048m -DTE_BASE=/root/te_base"
 RUN cd /root && \
     mkdir te_base && \
     mkdir te_base/scripts && \
-    echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list && \
+    #echo "deb http://archive.debian.org/debian stretch main" > /etc/apt/sources.list && \
     apt-get update && \
     apt-get install -y $BUILD_DEPS && \
     ls -l && \

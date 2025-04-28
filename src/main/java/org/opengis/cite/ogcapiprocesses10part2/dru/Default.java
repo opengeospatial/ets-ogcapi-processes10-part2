@@ -49,6 +49,8 @@ public class Default extends CommonFixture {
 	private String getAlternateProcessListPath = null;
 
 	private String echoProcessId;
+
+	private OperationValidator validator;
 	
 	private URL getProcessListURL;
     
@@ -59,13 +61,20 @@ public class Default extends CommonFixture {
 	public void setup(ITestContext testContext) {		
 		String processListEndpointString = rootUri.toString() + getProcessListPath;		
 		try {		
-			openApi3 = new OpenApi3Parser().parse(specURI.toURL(), false);
+			openApi3 = new OpenApi3Parser().parse(specURL, false);
+			addServerUnderTest(openApi3);
+			final Path path = openApi3.getPathItemByOperationId(OPERATION_ID);
+			final Operation operation = openApi3.getOperationById(OPERATION_ID);
+			validator = new OperationValidator(openApi3, path, operation);
+			getProcessListURL = new URL(processListEndpointString);
+
+			/*openApi3 = new OpenApi3Parser().parse(specURL, false);
 			addServerUnderTest(openApi3);
 		    final Path path = openApi3.getPathItemByOperationId(OPERATION_ID);
 		    final Operation operation = openApi3.getOperationById(OPERATION_ID);
 		    new OperationValidator(openApi3, path, operation);
 		    getProcessListURL = new URL(processListEndpointString);
-			echoProcessId = (String) testContext.getSuite().getAttribute( SuiteAttribute.ECHO_PROCESS_ID.getName() );
+			//echoProcessId = (String) testContext.getSuite().getAttribute( SuiteAttribute.ECHO_PROCESS_ID.getName() );*/
 		} catch (MalformedURLException | ResolutionException | ValidationException e) {	
 			
 			Assert.fail("Could not set up endpoint: " + processListEndpointString + ". Exception: " + e.getLocalizedMessage());

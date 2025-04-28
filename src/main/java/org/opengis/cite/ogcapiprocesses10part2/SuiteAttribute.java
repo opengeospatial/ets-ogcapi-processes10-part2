@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.reprezen.kaizen.oasparser.model3.OpenApi3;
-import com.sun.jersey.api.client.Client;
+import jakarta.ws.rs.client.Client;
 
 /**
  * An enumerated type defining ISuite attributes that may be set to constitute a shared test fixture.
@@ -58,6 +58,11 @@ public enum SuiteAttribute {
      * Parsed OpenApi3 document resource /api; Added during execution.
      */
     API_MODEL( "apiModel", OpenApi3.class ),
+
+	/**
+	 * Use local OpenAPI schema included in ETS.
+	 */
+	USE_LOCAL_SCHEMA("useLocalSchema", Boolean.class),
 
     /**
      * Requirement classes parsed from /conformance; Added during execution.
