@@ -130,7 +130,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>org.opengis.cite.ogcapiprocesses10.TestNGController</mainClass>
+              <mainClass>org.opengis.cite.ogcapiprocesses10part2.TestNGController</mainClass>
             </manifest>
           </archive>
         </configuration>
